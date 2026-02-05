@@ -17,8 +17,14 @@ namespace Agendamento01
         {
             var builder = WebApplication.CreateBuilder(args);
 
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            var password = builder.Configuration["Supabase:Password"];
+
+            connectionString = connectionString.Replace("Password=;", $"Password={password};");
+
             // Add services to the container.
-            builder.Services.AddDbContext<AgendamentoContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<AgendamentoContext>(options => options.UseNpgsql(connectionString));
             builder.Services.AddScoped<IAlunoService, AlunoService>();
             builder.Services.AddScoped<IAulaService, AulaService>();
             builder.Services.AddScoped<RelatorioService, RelatorioService>();

@@ -14,7 +14,7 @@ namespace Agendamento01.Controllers
             _relatorioService = relatorioService;
         }
         [HttpGet(Name = "RelatorioAulas")]
-        public async Task<IActionResult> RelatorioAulasMaisFrequentes(int alunoId)
+        public async Task<IActionResult> AulasMaisFrequentes(int alunoId)
         {
             var result = await _relatorioService.RelatorioAulas(alunoId);
             return Ok(result);
