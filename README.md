@@ -88,7 +88,7 @@ User: postgres
 
 ### 4. Configure o arquivo appsettings.json
 
-Edite o arquivo `Agendamento01/appsettings.json`:
+Edite o arquivo `Agendamento.API/appsettings.json`:
 
 ```json
 {
@@ -175,42 +175,56 @@ O Swagger fornece interface visual para testar todos os endpoints da API.
 
 ### Endpoints Principais
 
-#### Alunos
+> Observação: a rota base usa o padrão `[Route("[controller]/[action]")]`, então os endpoints seguem `/Controller/Action`.
+
+#### Alunos (`AlunosController`)
 - `POST /Alunos/CadastroAluno` - Cadastrar novo aluno
+- `PUT /Alunos/EditarAluno/{id}` - Editar aluno
+- `GET /Alunos/ListarAlunos` - Listar todos os alunos
+- `GET /Alunos/ListarAluno/{id}` - Buscar aluno por ID
+- `DELETE /Alunos/ApagarAluno/{id}` - Apagar aluno
 
-#### Aulas
-- `POST /Aulas/CadastroAula` - Criar nova aula
-- `POST /Aulas/AgendamentoAula` - Agendar aluno em aula
-
-
-#### Relatórios
-- `GET /Relatorio/AulasMaisFrequentes` - Relatório de frequência mensal do aluno
-
-#### Relatórios
-- `GET /api/relatorios/aluno/{id}` - Relatório de frequência mensal do aluno
+#### Agendamentos (`AgendamentoController`)
+- `POST /Agendamento/AddAgendamento` - Criar agendamento (parâmetros: `alunoId`, `aulaId`)
+- `PUT /Agendamento/AtualizarAgendamento/{id}` - Atualizar agendamento (envia `AgendamentoDto`)
+- `GET /Agendamento/ListarAgendamentos` - Listar todos os agendamentos
+- `GET /Agendamento/ListarAgendamentoPorId/{id}` - Buscar agendamento por ID
+- `DELETE /Agendamento/ApagarAgendamento/{id}` - Apagar agendamento
 
 ## 🗂️ Estrutura do Projeto
 
 ```
 AgendamentoAulas/
-├── Agendamento01/
-│   ├── Alunos/
-│   │   ├── Models/          # Modelos de domínio
-│   │   ├── Services/        # Lógica de negócio
-│   │   └── Interfaces/      # Contratos de serviços
-│   ├── Aulas/
-│   │   ├── Models/
+├── .github/
+├── src/
+│   ├── Agendamento.API/
+│   │   ├── Controllers/
+│   │   ├── Properties/
+│   │   ├── Agendamento.API.csproj
+│   │   ├── Agendamento.API.http
+│   │   ├── Program.cs
+│   │   ├── appsettings.json
+│   │   └── appsettings.Development.json
+│   ├── Agendamento.Application/
+│   │   ├── DTOs/
+│   │   ├── Interfaces/
 │   │   ├── Services/
-│   │   └── Interfaces/
-│   ├── Controllers/         # Endpoints da API
-│   ├── Data/
-│   │   └── AgendamentoContext.cs  # DbContext do EF Core
-│   ├── Migrations/          # Histórico de migrations
-│   ├── Relatorios/
-│   │   └── Services/        # Serviços de relatórios
-│   ├── Program.cs           # Configuração da aplicação
-│   └── appsettings.json     # Configurações (sem senhas)
-└── Agendamento01.sln
+│   │   └── Agendamento.Application.csproj
+│   ├── Agendamento.Domain/
+│   │   ├── Entities/
+│   │   ├── Enums/
+│   │   ├── Interfaces/
+│   │   └── Agendamento.Domain.csproj
+│   └── Agendamento.Infrastructure/
+│       ├── Data/
+│       │   ├── Migrations/
+│       │   └── AgendamentoContext.cs
+│       ├── Repositories/
+│       └── Agendamento.Infrastructure.csproj
+├── .gitattributes
+├── .gitignore
+├── AgendamentoAulas.sln
+└── README.md
 ```
 
 ## 🔧 Comandos Úteis
@@ -365,26 +379,6 @@ $env:SupabasePassword="senha_producao"
 ```
 
 ## ✍️ Próximos Passos
-
-### Desenvolver novos endpoints para outras funções, sendo eles:
-
-#### Alunos
-- `GET /Alunos/ListarAlunos` - Listar todos os alunos
-- `GET /Alunos/BuscarAluno` - Buscar aluno por ID
-- `PUT /Alunos/AtualizarAluno` - Atualizar dados do aluno
-- `DELETE /Alunos/RemoverAluno` - Remover aluno
-
-#### Aulas
-- `GET /Aulas/ListarAulas` - Listar todas as aulas
-- `GET /Aulas/BuscarAula` - Buscar aula por ID
-- `PUT /Aulas/AtualizarAula` - Atualizar aula
-- `DELETE /Aulas/RemoverAula` - Cancelar aula
-
-#### Agendamentos
-
-- `POST /Agendamentos/AgendamentoAula` - Agendar aluno em aula (migrado do endpoint Aulas/AgendamentoAula)
-- `GET /Agendamentos/ListarAgendamentos` - Listar todos os agendamentos
-- `DELETE /Agendamentos/RemoverAgendamento` - Cancelar agendamento
 
 ### Testes unitários
 
