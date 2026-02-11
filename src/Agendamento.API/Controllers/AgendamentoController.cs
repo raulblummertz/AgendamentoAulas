@@ -9,9 +9,13 @@ namespace Agendamento.API.Controllers;
 public class AgendamentoController : Controller
 {
     private readonly IAgendamentoService _agendamentoService;
-    public AgendamentoController(IAgendamentoService agendamentoService)
+    private readonly IValidator<AgendamentoDto> _validator;
+
+    public AgendamentoController(IAgendamentoService agendamentoService, IValidator<AgendamentoDto> validator)
     {
         _agendamentoService = agendamentoService;
+        _validator = validator;
+
     }
 
     [HttpPost(Name = "Agendamento")]
@@ -30,9 +34,14 @@ public class AgendamentoController : Controller
     }
 
     [HttpPut("{id}", Name = "AtualizarAgendamento")]
-    public async Task<IActionResult> AtualizarAgendamento(AgendamentoDto agendamentoDto)
+    public async Task<IActionResult> AtualizarAgendamento(int id, [FromBody] AgendamentoDto agendamentoDto)
     {
-        await _agendamentoService.AtualizarAgendamento(agendamentoDto);
+        var result = await _validator.ValidateAsync(agendamentoDto);
+        if (!result.IsValid)
+        {
+            return BadRequest(result.Errors.Select(e => e.ErrorMessage));
+        }
+        await _agendamentoService.AtualizarAgendamento(id, agendamentoDto);
         return Ok("Agendamento atualizado com sucesso!");
     }
 

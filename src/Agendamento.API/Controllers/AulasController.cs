@@ -1,6 +1,7 @@
 ﻿using Agendamento.Application.DTOs;
 using Agendamento.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace Agendamento.API.Controllers;
@@ -10,14 +11,22 @@ namespace Agendamento.API.Controllers;
 public class AulasController : Controller
 {
     private readonly IAulaService _aulaService;
-    public AulasController(IAulaService aulaService)
+    private readonly IValidator<AulaDto> _aulaDtoValidator;
+    public AulasController(IAulaService aulaService, IValidator<AulaDto> aulaDtoValidator)
     {
         _aulaService = aulaService;
+        _aulaDtoValidator = aulaDtoValidator;
     }
 
     [HttpPost(Name = "CadastroAula")]
-    public async Task<IActionResult> CadastroAula(AulaDto aulaDto)
+    public async Task<IActionResult> CadastroAula([FromBody] AulaDto aulaDto)
     {
+        var result = await _aulaDtoValidator.ValidateAsync(aulaDto);
+
+        if (!result.IsValid)
+        {
+            return BadRequest(result.Errors.Select(e => e.ErrorMessage));
+        }
         await _aulaService.CadastroAula(aulaDto);
         return Ok("Aula cadastrada com sucesso!");
     }
@@ -37,8 +46,14 @@ public class AulasController : Controller
     }
 
     [HttpPut("{id}", Name = "EditarAula")]
-    public async Task<IActionResult> EditarAula(int id, AulaDto aulaDto)
+    public async Task<IActionResult> EditarAula(int id, [FromBody] AulaDto aulaDto)
     {
+        var result = await _aulaDtoValidator.ValidateAsync(aulaDto);
+
+        if (!result.IsValid)
+        {
+            return BadRequest(result.Errors.Select(e => e.ErrorMessage));
+        }
         await _aulaService.EditarAula(aulaDto);
         return Ok("Aula editada com sucesso!");
     }

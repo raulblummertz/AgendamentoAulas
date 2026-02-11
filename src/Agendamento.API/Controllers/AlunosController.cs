@@ -9,20 +9,36 @@ namespace Agendamento.API.Controllers;
 public class AlunosController : Controller
 {
     private readonly IAlunoService _alunoService;
-    public AlunosController(IAlunoService alunoService)
+    private readonly IValidator<AlunoDto> _validator;
+    public AlunosController(IAlunoService alunoService, IValidator<AlunoDto> validator)
     {
         _alunoService = alunoService;
+        _validator = validator;
     }
     [HttpPost(Name = "CadastroAluno")]
-    public async Task<IActionResult> CadastroAluno(AlunoDto alunoDto)
+    public async Task<IActionResult> CadastroAluno([FromBody] AlunoDto alunoDto)
     {
+        var result = await _validator.ValidateAsync(alunoDto);
+        
+        if (!result.IsValid)
+        {
+            return BadRequest(result.Errors.Select(e => e.ErrorMessage));
+        }
+
         await _alunoService.CadastroAluno(alunoDto);
         return Ok("Aluno cadastrado com sucesso!");
     }
 
     [HttpPut("{id}", Name = "EditarAluno")]
-    public async Task<IActionResult> EditarAluno(int id, AlunoDto alunoDto)
+    public async Task<IActionResult> EditarAluno(int id, [FromBody] AlunoDto alunoDto)
     {
+        var result = await _validator.ValidateAsync(alunoDto);
+        
+        if (!result.IsValid)
+        {
+            return BadRequest(result.Errors.Select(e => e.ErrorMessage));
+        }
+
         await _alunoService.EditarAluno(id, alunoDto);
         return Ok("Aluno editado com sucesso!");
     }
@@ -35,7 +51,7 @@ public class AlunosController : Controller
     }
 
     [HttpGet("{id}", Name = "ListarAluno")]
-        public async Task<IActionResult> ListarAluno(int id)
+    public async Task<IActionResult> ListarAluno(int id)
     {
         var aluno = await _alunoService.ListarAlunoPorId(id);
         return Ok(aluno);

@@ -5,6 +5,7 @@ using Agendamento.Application.Services;
 using Agendamento.Application.Interfaces;
 using Agendamento.Infrastructure.Data;
 using Agendamento.Infrastructure.Repositories;
+using FluentValidation
 
 
 
@@ -36,7 +37,10 @@ public class Program
         builder.Services.AddScoped<IAgendamentoService, AgendamentoService>();
         builder.Services.AddScoped<RelatorioService, RelatorioService>();
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers().;
+        builder.Services.AddValidatorsFromAssemblyContaining<AlunoDtoValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<AulaDtoValidator>();
+        builder.Services.AddValidatorsFromAssemblyContaining<AgendamentoDtoValidator>();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
