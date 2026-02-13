@@ -9,6 +9,6 @@ public interface IAgendamentoService
     Task<AgendamentoDto?> ListarAgendamentosPorId(int id);
     Task<IEnumerable<AgendamentoDto>> ListarAgendamentos();
     Task AddAgendamento(int alunoId, int aulaId);
-    Task AtualizarAgendamento(AgendamentoDto agendamento);
+    Task AtualizarAgendamento(int id, AgendamentoDto agendamento);
     Task ApagarAgendamento(int id);
 }

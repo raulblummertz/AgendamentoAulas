@@ -3,6 +3,7 @@ using Agendamento.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
 using Microsoft.EntityFrameworkCore.Metadata;
+using FluentValidation;
 
 namespace Agendamento.API.Controllers;
 
@@ -54,7 +55,7 @@ public class AulasController : Controller
         {
             return BadRequest(result.Errors.Select(e => e.ErrorMessage));
         }
-        await _aulaService.EditarAula(aulaDto);
+        await _aulaService.EditarAula(id, aulaDto);
         return Ok("Aula editada com sucesso!");
     }
 

@@ -62,6 +62,7 @@ public class AlunoService : IAlunoService
         alunoExistente.Nome = alunoDto.Nome;
         alunoExistente.Plano = alunoDto.Plano;
         await _repository.UpdateAsync(alunoExistente);
+
     }
 
     public async Task ApagarAluno(int id)

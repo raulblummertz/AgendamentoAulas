@@ -8,8 +8,8 @@ public class AlunoDtoValidator : AbstractValidator<AlunoDto>
     public AlunoDtoValidator()
     {
         RuleFor(a => a.Nome)
-            .NotEmpty().WithMessage("O nome do aluno é obrigatório.")
-        RuleFor(a => a.TipoPlano)
-            .NotEmpty().WithMessage("O tipo do plano é obrigatório.")
+            .NotEmpty().WithMessage("O nome do aluno ï¿½ obrigatï¿½rio.");
+        RuleFor(a => a.Plano)
+            .NotEmpty().WithMessage("O tipo do plano ï¿½ obrigatï¿½rio.");
     }
 }

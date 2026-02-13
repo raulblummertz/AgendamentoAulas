@@ -1,6 +1,7 @@
 using Agendamento.Application.DTOs;
 using Agendamento.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using FluentValidation;
 
 namespace Agendamento.API.Controllers;
 

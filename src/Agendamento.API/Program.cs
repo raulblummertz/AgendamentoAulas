@@ -5,7 +5,8 @@ using Agendamento.Application.Services;
 using Agendamento.Application.Interfaces;
 using Agendamento.Infrastructure.Data;
 using Agendamento.Infrastructure.Repositories;
-using FluentValidation
+using Agendamento.API.Validators;
+using FluentValidation;
 
 
 
@@ -17,9 +18,9 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("ConnectionString não configurada");
+        var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("ConnectionString nï¿½o configurada");
 
-        var password = builder.Configuration["Supabase:Password"] ?? throw new InvalidOperationException("SupabasePassword não configurada"); 
+        var password = builder.Configuration["Supabase:Password"] ?? throw new InvalidOperationException("SupabasePassword nï¿½o configurada"); 
 
         connectionString = connectionString.Replace("Password=;", $"Password={password};");
 
@@ -37,10 +38,9 @@ public class Program
         builder.Services.AddScoped<IAgendamentoService, AgendamentoService>();
         builder.Services.AddScoped<RelatorioService, RelatorioService>();
 
-        builder.Services.AddControllers().;
-        builder.Services.AddValidatorsFromAssemblyContaining<AlunoDtoValidator>();
-        builder.Services.AddValidatorsFromAssemblyContaining<AulaDtoValidator>();
-        builder.Services.AddValidatorsFromAssemblyContaining<AgendamentoDtoValidator>();
+        builder.Services.AddControllers();
+        builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+      
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
         builder.Services.AddSwaggerGen();
