@@ -199,7 +199,15 @@ AgendamentoAulas/
 ├── src/
 │   ├── Agendamento.API/
 │   │   ├── Controllers/
+│   │   │   ├── AgendamentoController.cs
+│   │   │   ├── AlunosController.cs
+│   │   │   ├── AulasController.cs
+│   │   │   └── RelatorioController.cs
 │   │   ├── Properties/
+│   │   ├── Validators/
+│   │   │   ├── AgendamentoDtoValidator.cs
+│   │   │   ├── AlunoDtoValidator.cs
+│   │   │   └── AulaDtoValidator.cs
 │   │   ├── Agendamento.API.csproj
 │   │   ├── Agendamento.API.http
 │   │   ├── Program.cs
@@ -207,20 +215,56 @@ AgendamentoAulas/
 │   │   └── appsettings.Development.json
 │   ├── Agendamento.Application/
 │   │   ├── DTOs/
+│   │   │   ├── AgendamentoDto.cs
+│   │   │   ├── AlunoDto.cs
+│   │   │   ├── AulaDto.cs
+│   │   │   ├── RelatorioDto.cs
 │   │   ├── Interfaces/
+│   │   │   ├── IAgendamentoService.cs
+│   │   │   ├── IAlunoService.cs
+│   │   │   ├── IAulaService.cs
+│   │   │   └── IRelatorioService.cs
 │   │   ├── Services/
+│   │   │   ├── AgendamentoService.cs
+│   │   │   ├── AlunoService.cs
+│   │   │   ├── AulaService.cs
+│   │   │   └── RelatorioService.cs
 │   │   └── Agendamento.Application.csproj
 │   ├── Agendamento.Domain/
 │   │   ├── Entities/
+│   │   │   ├── Agendamentos.cs
+│   │   │   ├── Aluno.cs
+│   │   │   └── Aula.cs
 │   │   ├── Enums/
+│   │   │   └── EnumTipoPlano.cs
+│   │   ├── Factories/
+│   │   │   └── PlanoStrategyFactory.cs
 │   │   ├── Interfaces/
+│   │   │   ├── IAgendamentoQueryRepository.cs
+│   │   │   ├── IAgendamentoRepository.cs
+│   │   │   ├── IAlunoRepository.cs
+│   │   │   ├── IAulaRepository.cs
+│   │   │   └── IPlanoStrategy.cs
+│   │   ├── Strategies/
+│   │   │   ├── PlanoAnualStrategy.cs
+│   │   │   ├── PlanoMensalStrategy.cs
+│   │   │   └── PlanoTrimestralStrategy.cs
 │   │   └── Agendamento.Domain.csproj
 │   └── Agendamento.Infrastructure/
 │       ├── Data/
 │       │   ├── Migrations/
 │       │   └── AgendamentoContext.cs
 │       ├── Repositories/
+│       │   ├── AgendamentoQueryRepository.cs
+│       │   ├── AgendamentoRepository.cs
+│       │   ├── AlunoRepository.cs
+│       │   └── AulaRepository.cs
 │       └── Agendamento.Infrastructure.csproj
+├── tests/
+│   └── Agendamento.Tests/
+│       ├── Dependencies/
+│       └── services/
+│           └── AlunoServiceTests.cs
 ├── .gitattributes
 ├── .gitignore
 ├── AgendamentoAulas.sln
