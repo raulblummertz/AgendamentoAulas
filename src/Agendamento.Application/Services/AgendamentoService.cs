@@ -12,21 +12,23 @@ public class AgendamentoService : IAgendamentoService
     private readonly IAlunoRepository _alunoRepository;
     private readonly IAulaRepository _aulaRepository;
     private readonly IAgendamentoRepository _agendamentoRepository;
+    private readonly IAgendamentoQueryRepository _agendamentoQueryRepository;
 
-    public AgendamentoService(IAlunoRepository alunoRepository, IAulaRepository aulaRepository, IAgendamentoRepository agendamentoRepository)
+    public AgendamentoService(IAlunoRepository alunoRepository, IAulaRepository aulaRepository, IAgendamentoRepository agendamentoRepository,  IAgendamentoQueryRepository agendamentoQueryRepository)
     {
         _alunoRepository = alunoRepository;
         _aulaRepository = aulaRepository;
         _agendamentoRepository = agendamentoRepository;
+        _agendamentoQueryRepository = agendamentoQueryRepository;
     }
 
     public async Task AddAgendamento(int alunoId, int aulaId)
     {
         var aluno = await _alunoRepository.GetByIdAsync(alunoId);
         var aula = await _aulaRepository.GetByIdAsync(aulaId);
-        var aulasAgendadasMes = await _agendamentoRepository.CountAgendamentosMesAsync(alunoId,aulaId);
+        var aulasAgendadasMes = await _agendamentoQueryRepository.CountAgendamentosMesAsync(alunoId,aulaId);
 
-        var participantesAtuais = await _agendamentoRepository.CountParticipantesAula(aulaId);
+        var participantesAtuais = await _agendamentoQueryRepository.CountParticipantesAula(aulaId);
 
         if (aluno == null) throw new KeyNotFoundException("Aluno não encontrado.");
         if (aula == null) throw new KeyNotFoundException("Aula não encontrada.");

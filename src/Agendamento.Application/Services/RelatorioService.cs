@@ -6,23 +6,21 @@ namespace Agendamento.Application.Services;
 
 public class RelatorioService
 {
-    private readonly IAlunoRepository _alunoRepository;
-    private readonly IAgendamentoRepository _agendamentoRepository;
+    
+    private readonly IAgendamentoQueryRepository _agendamentoQueryRepository;
 
-    public RelatorioService(IAlunoRepository alunoRepository, IAgendamentoRepository agendamentoRepository)
+    public RelatorioService(IAgendamentoQueryRepository agendamentoQueryRepository)
     {
-        _alunoRepository = alunoRepository;
-        _agendamentoRepository = agendamentoRepository;
+        _agendamentoQueryRepository = agendamentoQueryRepository;
     }
     public async Task<RelatorioDto> RelatorioAulas(int alunoId)
     {
         var hoje = DateTime.UtcNow;
-        var aluno = await _alunoRepository.GetByIdAsync(alunoId);
         var primeiroDiaDoMes = new DateTime(hoje.Year, hoje.Month, 1, 0, 0, 0, DateTimeKind.Utc);
         var primeiroDiaDoProximoMes = primeiroDiaDoMes.AddMonths(1);
-        var aulasAgendadasMes = await _agendamentoRepository.CountAulasMesAsync(alunoId, primeiroDiaDoMes, primeiroDiaDoProximoMes);
+        var aulasAgendadasMes = await _agendamentoQueryRepository.CountAulasMesAsync(alunoId, primeiroDiaDoMes, primeiroDiaDoProximoMes);
 
-        var frequenciaAulas = await _agendamentoRepository.GetAulasMaisFrequentesAsync(alunoId, primeiroDiaDoMes, primeiroDiaDoProximoMes);
+        var frequenciaAulas = await _agendamentoQueryRepository.GetAulasMaisFrequentesAsync(alunoId, primeiroDiaDoMes, primeiroDiaDoProximoMes);
 
         var aulasMaisFrequentes = frequenciaAulas.Select(f => new FrequenciaAulasDto
         {

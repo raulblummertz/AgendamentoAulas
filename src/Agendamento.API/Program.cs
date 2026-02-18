@@ -6,6 +6,8 @@ using Agendamento.Application.Interfaces;
 using Agendamento.Infrastructure.Data;
 using Agendamento.Infrastructure.Repositories;
 using Agendamento.API.Validators;
+using Agendamento.Domain.Entities;
+using Agendamento.Domain.Factories;
 using FluentValidation;
 
 
@@ -31,12 +33,16 @@ public class Program
         builder.Services.AddScoped<IAlunoRepository, AlunoRepository>();
         builder.Services.AddScoped<IAulaRepository, AulaRepository>();
         builder.Services.AddScoped<IAgendamentoRepository, AgendamentoRepository>();
+        builder.Services.AddScoped<IAgendamentoQueryRepository, AgendamentoQueryRepository>();
 
         // Services
         builder.Services.AddScoped<IAlunoService, AlunoService>();
         builder.Services.AddScoped<IAulaService, AulaService>();
         builder.Services.AddScoped<IAgendamentoService, AgendamentoService>();
         builder.Services.AddScoped<RelatorioService, RelatorioService>();
+        
+        // Factory
+        builder.Services.AddSingleton<PlanoStrategyFactory>();
 
         builder.Services.AddControllers();
         builder.Services.AddValidatorsFromAssemblyContaining<Program>();
@@ -46,6 +52,12 @@ public class Program
         builder.Services.AddSwaggerGen();
 
         var app = builder.Build();
+
+        using (var scope = app.Services.CreateScope())
+        {
+            var factory = scope.ServiceProvider.GetRequiredService<PlanoStrategyFactory>();
+            Aluno.ConfigurarFactory(factory);
+        }
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
