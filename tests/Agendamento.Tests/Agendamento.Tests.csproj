@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Agendamento.Application\Agendamento.Application.csproj" />
-    <ProjectReference Include="..\..\src\Agendamento.Domain\Agendamento.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Agendamentos.Application\Agendamentos.Application.csproj" />
+    <ProjectReference Include="..\..\src\Agendamentos.Domain\Agendamentos.Domain.csproj" />
   </ItemGroup>
 
 </Project>

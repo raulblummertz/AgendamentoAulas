@@ -14,7 +14,7 @@ public class AlunoServiceTests
     public async Task ListarAlunoPorId_DeveRetornarAluno_QuandoIdExiste()
     {
         
-        var mockRepository = new Mock<IAlunoRepository>();
+        var mockRepository = new Mock<IRepositoryBase<Aluno>>();
         
         var alunoId = 1;
         var alunoEsperado = new Aluno("João Silva", EnumTipoPlano.Mensal);
@@ -25,7 +25,7 @@ public class AlunoServiceTests
         
         var alunoService = new AlunoService(mockRepository.Object);
 
-        var resultado = await alunoService.ListarAlunoPorId(alunoId);
+        var resultado = await alunoService.ListarPorId(alunoId);
 
         Assert.NotNull(resultado);
         Assert.Equal(alunoId, resultado.Id);
@@ -38,7 +38,7 @@ public class AlunoServiceTests
     [Fact]
     public async Task EditarAluno_DeveRetornarAlunoEditado()
     {
-        var mockRepository = new Mock<IAlunoRepository>();
+        var mockRepository = new Mock<IRepositoryBase<Aluno>>();
         
         var alunoId = 1;
         var alunoEsperado = new Aluno("Mariazinha", EnumTipoPlano.Trimestral);
@@ -57,9 +57,9 @@ public class AlunoServiceTests
         
         var alunoService = new AlunoService(mockRepository.Object);
 
-        await alunoService.EditarAluno(alunoId, alunoEditado);
+        await alunoService.Editar(alunoId, alunoEditado);
         
-        var resultado = await alunoService.ListarAlunoPorId(alunoId);
+        var resultado = await alunoService.ListarPorId(alunoId);
         
         Assert.NotNull(resultado);
         Assert.Equal(alunoId, resultado.Id);
