@@ -9,6 +9,7 @@ using Agendamento.Infrastructure.Repositories;
 using Agendamento.Domain.Entities;
 using Agendamento.Domain.Factories;
 using FluentValidation;
+using FluentValidation.AspNetCore;
 
 
 
@@ -45,6 +46,7 @@ public class Program
         builder.Services.AddSingleton<PlanoStrategyFactory>();
 
         builder.Services.AddControllers();
+        builder.Services.AddFluentValidationAutoValidation();
         builder.Services.AddValidatorsFromAssemblyContaining<Program>();
       
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

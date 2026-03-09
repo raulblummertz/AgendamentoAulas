@@ -25,17 +25,18 @@ public class AgendamentoService : IAgendamentoService
     public async Task Cadastrar(int alunoId, int aulaId)
     {
         var aluno = await _alunoRepository.GetByIdAsync(alunoId) ?? throw new KeyNotFoundException("Aluno não encontrado.");
+        
         var aula = await _aulaRepository.GetByIdAsync(aulaId) ?? throw new KeyNotFoundException("Aula não encontrada.");
+        if (aula.DataHora < DateTime.Now)
+            throw new InvalidOperationException("Aula já ocorreu ou está agendada para o passado.");
+        
         var aulasAgendadasMes = await _agendamentoQueryRepository.CountAgendamentosMesAsync(alunoId,aulaId);
         if (aluno.LimiteAulas <= aulasAgendadasMes)
             throw new InvalidOperationException($"O aluno atingiu o limite de {aluno.LimiteAulas} aulas mensais do plano {aluno.Plano}.");
         
         var participantesAtuais = await _agendamentoQueryRepository.CountParticipantesAula(aulaId);
-     
         if (participantesAtuais >= aula.CapacidadeMaxima)
             throw new InvalidOperationException("Aula já está cheia.");
-        if (aula.DataHora < DateTime.Now)
-            throw new InvalidOperationException("Aula já ocorreu ou está agendada para o passado.");
         
         var novoAgendamento = new Domain.Entities.Agendamento(alunoId, aulaId);
         await _agendamentoRepository.AddAsync(novoAgendamento);
@@ -53,13 +54,12 @@ public class AgendamentoService : IAgendamentoService
         throw new NotSupportedException("Use Cadastrar(alunoId, aulaId)");
     }
 
-    public async Task Editar(int id, AgendamentoDto agendamento)
+    public async Task Editar(int id, AgendamentoDto agendamentoDto)
     {
-        var existente = await _agendamentoRepository.GetByIdAsync(id);
-        if (existente == null) throw new KeyNotFoundException("Agendamento não encontrado.");
-        existente.AlunoId = agendamento.AlunoId;
-        existente.AulaId = agendamento.AulaId;
-        await _agendamentoRepository.UpdateAsync(existente);
+        var agendamentoExistente = await _agendamentoRepository.GetByIdAsync(id) ?? throw new KeyNotFoundException("Agendamento não encontrado.");
+        agendamentoExistente.AlunoId = agendamentoDto.AlunoId;
+        agendamentoExistente.AulaId = agendamentoDto.AulaId;
+        await _agendamentoRepository.UpdateAsync(agendamentoExistente);
     }
 
     public async Task<IEnumerable<AgendamentoDto>> ListarTodos()

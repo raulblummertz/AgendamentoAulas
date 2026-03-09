@@ -25,8 +25,7 @@ public class AulaService : IServiceBase<AulaDto>
 
     public async Task Editar(int id, AulaDto aulaDto)
     {
-        var aulaExistente = await _aulaRepository.GetByIdAsync(id);
-        if (aulaExistente == null) throw new KeyNotFoundException("Aula não encontrada.");
+        var aulaExistente = await _aulaRepository.GetByIdAsync(id) ?? throw new KeyNotFoundException("Aula não encontrada.");
         aulaExistente.TipoAula = aulaDto.TipoAula;
         aulaExistente.DataHora = aulaDto.DataHora.ToUniversalTime();
         aulaExistente.CapacidadeMaxima = aulaDto.CapacidadeMaxima;
